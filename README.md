@@ -1,6 +1,6 @@
 <h3>Usage</h3>
 Tests can be run with the following gradlew command:
-<br>
+
 ```
 $ ./gradlew runAllTests
 ```
@@ -12,6 +12,7 @@ $ ./gradlew runAllTests
  <br><b><i>runTemperatureServiceTests</i></b> - run TestNG tests with 'temperatureService' group
 <h3>Overview</h3>
 Create test framework based on:
+
 ```
 Appium
 Java
