@@ -1,0 +1,49 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "io.qameta.allure:allure-gradle:2.3"
+    }
+}
+
+apply plugin: 'io.qameta.allure'
+
+allure {
+    autoconfigure = true
+    aspectjweaver = true
+    configuration = 'compile'
+    version = '2.1.1'
+}
+
+group 'AppiumHW'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+compileTestJava.options.encoding = 'UTF-8'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'io.appium', name: 'java-client', version: '4.1.2'
+}
+
+task runAllTests(type: Test){
+    group = 'Test'
+    description  = 'Runs TestNG all tests'
+    useTestNG(){}
+}
+
+task runTemperatureServiceTests(type: Test){
+    group = 'Test'
+    description  = 'Runs TestNG tests in the \'temperatureService\' group'
+    useTestNG(){
+        includeGroups 'temperatureService'
+    }
+}
+
+tasks.withType(Test)*.finalizedBy 'allureReport'
