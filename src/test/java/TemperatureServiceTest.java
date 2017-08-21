@@ -11,7 +11,7 @@ public class TemperatureServiceTest extends TestNGRunner {
     public static final double FAHRENHEIT_COEFFICIENT = 32;
 
     @Test(groups = "temperatureService")
-    public void verifyThatAllNumberButtonAreClickable(){
+    public void verifyThatAllNumberButtonAreClickable() {
         TemperatureServicePage temperatureServicePage = menuPage.selectTemperatureService();
         temperatureServicePage.openPanelWithNumbers();
         temperatureServicePage.enterValue(ALL_NUMBERS);
@@ -20,7 +20,7 @@ public class TemperatureServiceTest extends TestNGRunner {
     }
 
     @Test(groups = "temperatureService")
-    public void verifyClearButtonFunctionality(){
+    public void verifyClearButtonFunctionality() {
         TemperatureServicePage temperatureServicePage = menuPage.selectTemperatureService();
         temperatureServicePage.openPanelWithNumbers();
         temperatureServicePage.enterValue(POSITIVE_TEMPERATURE);
@@ -30,8 +30,8 @@ public class TemperatureServiceTest extends TestNGRunner {
     }
 
     @Test(groups = "temperatureService")
-    public void verifyBackButtonFunctionality(){
-        String expectedValue = POSITIVE_TEMPERATURE.substring(0, POSITIVE_TEMPERATURE.length()-1);
+    public void verifyBackButtonFunctionality() {
+        String expectedValue = POSITIVE_TEMPERATURE.substring(0, POSITIVE_TEMPERATURE.length() - 1);
 
         TemperatureServicePage temperatureServicePage = menuPage.selectTemperatureService();
         temperatureServicePage.openPanelWithNumbers();
@@ -42,28 +42,28 @@ public class TemperatureServiceTest extends TestNGRunner {
     }
 
     @Test(groups = "temperatureService")
-    public void verifyPlusMinusButtonFunctionality(){
+    public void verifyPlusMinusButtonFunctionality() {
         TemperatureServicePage temperatureServicePage = menuPage.selectTemperatureService();
         temperatureServicePage.openPanelWithNumbers();
         temperatureServicePage.enterValue(POSITIVE_TEMPERATURE);
         temperatureServicePage.clickPlusMinusButton();
-        Assert.assertEquals(temperatureServicePage.getEnteredNumber(), "-"+ POSITIVE_TEMPERATURE, "After clicking on +/- button at first time the number didn't become negative");
+        Assert.assertEquals(temperatureServicePage.getEnteredNumber(), "-" + POSITIVE_TEMPERATURE, "After clicking on +/- button at first time the number didn't become negative");
 
         temperatureServicePage.clickPlusMinusButton();
         Assert.assertEquals(temperatureServicePage.getEnteredNumber(), POSITIVE_TEMPERATURE, "After clicking on +/- button at second time the number didn't become positive");
     }
 
     @Test(groups = "temperatureService")
-    public void verifyOkButtonFunctionality(){
+    public void verifyOkButtonFunctionality() {
         TemperatureServicePage temperatureServicePage = menuPage.selectTemperatureService();
         temperatureServicePage.openPanelWithNumbers();
         temperatureServicePage.closePanelWithNumbers();
 
-        Assert.assertFalse(temperatureServicePage.isPanelWithNumbersDisplayed(),  "After clicking on 'Ok' button the panel with number wasn't disappear");
+        Assert.assertFalse(temperatureServicePage.isPanelWithNumbersDisplayed(), "After clicking on 'Ok' button the panel with number wasn't disappear");
     }
 
     @Test(groups = "temperatureService")
-    public void verifyThatPositiveTemperatureConvertedCorrectly(){
+    public void verifyThatPositiveTemperatureConvertedCorrectly() {
         TemperatureServicePage temperatureServicePage = menuPage.selectTemperatureService();
         temperatureServicePage.openPanelWithNumbers();
         temperatureServicePage.enterValue(POSITIVE_TEMPERATURE);
@@ -73,18 +73,18 @@ public class TemperatureServiceTest extends TestNGRunner {
     }
 
     @Test(groups = "temperatureService")
-    public void verifyThatNegativeTemperatureConvertedCorrectly(){
+    public void verifyThatNegativeTemperatureConvertedCorrectly() {
         TemperatureServicePage temperatureServicePage = menuPage.selectTemperatureService();
         temperatureServicePage.openPanelWithNumbers();
         temperatureServicePage.enterValue(POSITIVE_TEMPERATURE);
         temperatureServicePage.clickPlusMinusButton();
         temperatureServicePage.closePanelWithNumbers();
 
-        verifyThatTemperatureConvertedCorrectly(temperatureServicePage,  "-"+POSITIVE_TEMPERATURE);
+        verifyThatTemperatureConvertedCorrectly(temperatureServicePage, "-" + POSITIVE_TEMPERATURE);
     }
 
     @Test(groups = "temperatureService")
-    public void verifyThatDegreeIconsDisplayedCorrectly(){
+    public void verifyThatDegreeIconsDisplayedCorrectly() {
         TemperatureServicePage temperatureServicePage = menuPage.selectTemperatureService();
 
         SoftAssert softAssert = new SoftAssert();
@@ -105,11 +105,11 @@ public class TemperatureServiceTest extends TestNGRunner {
     }
 
     private double calculateKelvinDegree(String temperature) {
-        return Math.ceil((Double.parseDouble(temperature)+KELVIN_COEFFICIENT)*100)/100;
+        return Math.ceil((Double.parseDouble(temperature) + KELVIN_COEFFICIENT) * 100) / 100;
     }
 
     private double calculateFahrenheitDegree(String temperature) {
-        return Math.ceil((Double.parseDouble(temperature)*1.8+FAHRENHEIT_COEFFICIENT)*10)/10;
+        return Math.ceil((Double.parseDouble(temperature) * 1.8 + FAHRENHEIT_COEFFICIENT) * 10) / 10;
     }
 
     private double calculateCelsiusDegree(String temperature) {

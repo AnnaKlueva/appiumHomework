@@ -5,3 +5,4 @@ allure-results/
 build/
 out/
 *.iml
+/src/main/resources/config.properties

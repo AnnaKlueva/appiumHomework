@@ -20,6 +20,7 @@ group 'AppiumHW'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
+apply plugin: 'groovy'
 
 sourceCompatibility = 1.8
 compileTestJava.options.encoding = 'UTF-8'
@@ -30,20 +31,29 @@ repositories {
 
 dependencies {
     compile group: 'io.appium', name: 'java-client', version: '4.1.2'
+    compile group: 'org.yaml', name: 'snakeyaml', version: '1.18'
+    compile 'org.codehaus.groovy:groovy-all:2.4.7'
 }
 
-task runAllTests(type: Test){
+task runAllTests(type: Test, dependsOn: 'generatePropertyFile'){
     group = 'Test'
     description  = 'Runs TestNG all tests'
     useTestNG(){}
 }
 
-task runTemperatureServiceTests(type: Test){
+task runTemperatureServiceTests(type: Test, dependsOn: 'generatePropertyFile'){
     group = 'Test'
     description  = 'Runs TestNG tests in the \'temperatureService\' group'
     useTestNG(){
         includeGroups 'temperatureService'
     }
+}
+
+task generatePropertyFile(type: JavaExec) {
+    description = 'Creates config.properties file with selected profile'
+    main = 'anna.kliuieva.petproject.PropertyFileGenerator'
+    classpath = sourceSets.main.runtimeClasspath
+    systemProperty "test.config", project.findProperty("test.config") ?: "android-mobile"
 }
 
 tasks.withType(Test)*.finalizedBy 'allureReport'

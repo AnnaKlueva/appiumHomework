@@ -11,20 +11,14 @@ import java.util.Properties;
 public class Configuration {
 
     private static final String DEVICE_PROPERTY_NAME = "test.device";
-    private static final String DEVICE_NAME = "deviceName";
     private static final Logger LOG = LoggerFactory.getLogger(Configuration.class);
     static Properties properties;
 
     private Configuration() {
     }
 
-
-    public static String getDevice() {
-        return getFileProperty(DEVICE_PROPERTY_NAME);
-    }
-
     public static String getDeviceName() {
-        return getFileProperty(DEVICE_NAME);
+        return getFileProperty(DEVICE_PROPERTY_NAME);
     }
 
     public static String getAppPath() {
