@@ -19,6 +19,7 @@ Java
 TestNG
 Allure
 Gradle
+Local run and remote run (Kobiton)
 ```
 As app for testing was taken 'Unit converter' which can 
 convert different measurements like length, weight, area, temperature and other.
