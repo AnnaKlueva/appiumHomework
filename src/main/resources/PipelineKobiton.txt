@@ -1,0 +1,69 @@
+pipeline {
+    agent {
+        label 'master'
+    }
+    tools {
+        maven 'maven35'
+    }
+    parameters {
+    choice(
+        name: 'pom_folder',
+        choices: """AppiumHomework""",
+        description: 'Choose folder where to find pom.xml to build/test.' )
+    string(
+        defaultValue: """Kobition/src/main/resources/FreeUnitConverter.apk""",
+        description: 'Path to app. Can be remote',
+        name: 'FILEPATH',
+        trim: false)
+    }
+
+    stages {
+        stage('Checkout repo') {
+            steps {
+                git credentialsId: '', url: '', branch: ''
+            }
+        }
+        stage('Run tests'){
+            environment {
+                APPLICATION_ID=sh (returnStdout: true, script: '''postDataJson="{\\"filename\\":\\"sharingApp.apk\\"}"
+                getUploadUrl=$(curl -X POST https://api.kobiton.com/v1/apps/uploadUrl \\
+                -H \'Authorization: Basic YW5uYTg4ODo0N2MxODgwZC1hZDIxLTQ4NjgtODk3ZS1hZjJmZDdmMDEwYzQ=\' \\
+                -H \'Content-Type: application/json\' \\
+                -H \'Accept: application/json\' \\
+                -d ${postDataJson})
+
+                appPath="${getUploadUrl#*appPath\\"\\:\\"}"
+                appPath="${appPath%%\\"*}"
+
+                # strip everything up to and including the first instance of \'Browser[\'
+                presignedUrl="${getUploadUrl#*url\\"\\:\\"}"
+                # strip everything after the first \']\', again, inclusive
+                presignedUrl="${presignedUrl%%\\"*}"
+
+                uploadToS3=$(curl -T $FILEPATH \\
+                -H "Content-Type: application/octet-stream" \\
+                -H "x-amz-tagging: unsaved=true" \\
+                -X PUT $presignedUrl)
+
+                createAppJsonBody="{\\"filename\\":\\"sharingApp.apk\\",\\"appPath\\":\\"$appPath\\"}"
+                createApplicationOrVersion=$(curl -X POST https://api.kobiton.com/v1/apps \\
+                -H \'Authorization: Basic YW5uYTg4ODo0N2MxODgwZC1hZDIxLTQ4NjgtODk3ZS1hZjJmZDdmMDEwYzQ=\' \\
+                -H \'Content-Type: application/json\'\\
+                -d ${createAppJsonBody})
+                APP_ID="${createApplicationOrVersion#*:}"
+                APP_ID="${APP_ID%%,*}"
+                echo $APP_ID''').trim()
+            }
+            steps {
+                sh "echo APPLICATION_ID is $APPLICATION_ID"
+                sh "mvn -f ${params.pom_folder}/pom.xml clean test -PkobitonRun -DkobitonRemotePath=kobiton-store:${APPLICATION_ID}"
+            }
+        }
+    }
+    post {
+        always {
+            archive "${params.pom_folder}/target/**/*"
+            junit "${params.pom_folder}/target/surefire-reports/Surefire suite/*.xml"
+        }
+    }
+}

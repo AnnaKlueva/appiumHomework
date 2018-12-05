@@ -8,22 +8,20 @@ properties:
     test.profile: ios
 
   profile-android: &profile_android
-    test.profile: android
+    test.profile: Android
 
   #Chanel
   ios-mobile-chanel: &ios_mobile_chanel
     test.device: iPhone 6
 
-  #TODO: change device name
-  ios-tablet-chanel: &ios_tablet_chanel
-    test.device: Apple iPad
-
   android-mobile-chanel: &android_mobile_chanel
     test.device: Nexus_5X
 
-  #TODO: change device name
-  android-tablet-chanel: &android_tablet_chanel
-    test.device: Nexus_5X
+  kobiton-advance-properties: &kobiton_advance_properties
+    sessionName: Automation test session
+    deviceOrientation: portrait
+    captureScreenshots: true
+    deviceGroup: KOBITON
 
   #Global variables for Maven
   default-config: &default_config
@@ -36,17 +34,11 @@ properties:
     <<: *default_thread_count
     <<: *ios_mobile_chanel
 
-  ios-tablet:
-    <<: *profile_ios
-    <<: *default_thread_count
-    <<: *ios_tablet_chanel
-
   android-mobile:
     <<: *profile_android
     <<: *default_thread_count
     <<: *android_mobile_chanel
 
-  android-tablet:
+  android-kobition:
     <<: *profile_android
-    <<: *default_thread_count
-    <<: *android_tablet_chanel
+    <<: *kobiton_advance_properties

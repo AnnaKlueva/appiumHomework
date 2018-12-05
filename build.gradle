@@ -33,6 +33,7 @@ dependencies {
     compile group: 'io.appium', name: 'java-client', version: '4.1.2'
     compile group: 'org.yaml', name: 'snakeyaml', version: '1.18'
     compile 'org.codehaus.groovy:groovy-all:2.4.7'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.7'
 }
 
 task runAllTests(type: Test, dependsOn: 'generatePropertyFile'){
@@ -51,9 +52,10 @@ task runTemperatureServiceTests(type: Test, dependsOn: 'generatePropertyFile'){
 
 task generatePropertyFile(type: JavaExec) {
     description = 'Creates config.properties file with selected profile'
+    systemProperty "test.config", project.findProperty("test.config") ?: "android-kobition"
+    systemProperty "kobitonRemotePath", project.findProperty("kobitonRemotePath") ?: "kobiton-store:25678"
     main = 'anna.kliuieva.petproject.PropertyFileGenerator'
     classpath = sourceSets.main.runtimeClasspath
-    systemProperty "test.config", project.findProperty("test.config") ?: "android-mobile"
 }
 
 tasks.withType(Test)*.finalizedBy 'allureReport'

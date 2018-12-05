@@ -1,5 +1,6 @@
 package anna.kliuieva.petproject
 
+
 import org.yaml.snakeyaml.Yaml;
 
 class PropertyFileGenerator {
@@ -29,6 +30,11 @@ class PropertyFileGenerator {
         InputStream streamYamlProperties = new FileInputStream(new File(YAML_FILE));
         def props = propertiesYaml.load(streamYamlProperties);
         configProps = props['properties'][config];
+        if(config.contains('kobition')){
+            KobitonDevice availableDevice = KobitonAPI.getAvailableDevice(configProps.getProperty('test.profile'))
+            configProps.put("test.device", availableDevice.getDeviceName());
+            configProps.put("platformVersion", availableDevice.getPlatformVersion());
+        }
     }
 
     void generatePropFile() {
